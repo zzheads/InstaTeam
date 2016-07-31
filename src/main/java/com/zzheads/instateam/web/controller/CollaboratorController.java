@@ -60,7 +60,12 @@ public class CollaboratorController {
     // Update a collaborator
     @RequestMapping(value = "/collaborator/{collaboratorId}", method = RequestMethod.POST)
     public String editCollaborator(@ModelAttribute Collaborator collaborator, @PathVariable Long collaboratorId) {
+        // if we changed role of collaborator - we need change that collaborator on empty one
         collaborator.getRole().setName(mRoleService.findById(collaborator.getRole().getId()).getName());
+        for (Project p : mProjectService.findAllWithCollaborator(collaborator)) {
+            p.getCollaborators().remove(collaborator);
+            p.getCollaborators().add(ProjectController.EMPTY_COLLABORATOR);
+        }
         mCollaboratorService.save(collaborator);
         return "redirect:/collaborators";
     }
