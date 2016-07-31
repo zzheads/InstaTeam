@@ -15,9 +15,6 @@ package com.zzheads.instateam.model;//
 //    DONE: Default constructor
 
 
-
-
-
 import com.zzheads.instateam.web.controller.ProjectController;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.LazyCollection;
@@ -27,6 +24,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,6 +42,8 @@ public class Project {
     private String description;
 
     private Status status;
+
+    private Date start;
 
     @ManyToMany
     @LazyCollection(LazyCollectionOption.FALSE)
@@ -103,13 +103,23 @@ public class Project {
         this.name = name;
     }
 
+    public Date getStart() {
+        return start;
+    }
+
+    public void setStart(Date start) {
+        this.start = start;
+    }
+
     public void deleteRole (Role role) {
-        rolesNeeded = rolesNeeded.stream().filter(r->!r.equals(role)).collect(Collectors.toList());
-        collaborators = collaborators.stream().filter(c->!c.getRole().equals(role)).collect(Collectors.toList());
+        for (Collaborator c : collaborators) {
+            if (c.getRole().equals(role)) collaborators.remove(c);
+        }
+        rolesNeeded.remove(role);
     }
 
     public void deleteCollaborator (Collaborator collaborator) {
-        collaborators = collaborators.stream().filter(c->!c.equals(collaborator)).collect(Collectors.toList());
+        collaborators.remove(collaborator);
     }
 
     public void fixCollaboratorsAndRoles () {

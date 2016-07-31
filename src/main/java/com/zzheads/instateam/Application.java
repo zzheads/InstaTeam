@@ -32,6 +32,6 @@ public class Application {
 //    DONE: Create the ProjectController and Thymeleaf views necessary for viewing, adding, and editing projects, without including the ability to assign each role to a specific collaborator.
 //    DONE: Add the methods to ProjectController, and the Thymeleaf views necessary for assigning and unassigning collaborators to and from a project’s needed roles.
 //
-//    TODO: Extract the common code of each DAO implementation to an abstract class that the DAO implementations extend.
-//    TODO: Add the ability to delete projects, roles, and contractors and ensure data integrity for all relationships. For example, when a collaborator is deleted, make sure that all roles previously assigned to this collaborator become unassigned.
+//    DONE: Extract the common code of each DAO implementation to an abstract class that the DAO implementations extend.
+//    DONE: Add the ability to delete projects, roles, and contractors and ensure data integrity for all relationships. For example, when a collaborator is deleted, make sure that all roles previously assigned to this collaborator become unassigned.
 //    TODO: Include a start date on projects, and sort chronologically by start date on the project index view.
