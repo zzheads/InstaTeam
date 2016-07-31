@@ -37,19 +37,19 @@
                         <ul class="checkbox-list">
                             <li th:each="project : ${projects}"><a th:href="@{'/project_detail/' + ${project.id}}"><span class="primary" th:text="${project.name}"></span></a></li>
                         </ul>
-                        <div class="actions edit-collaborator">
-                            <input type="text"  required="true" th:placeholder="${collaborator.name}" th:field="${collaborator.name}"/>
-                            <div class="custom-select">
-                                <span class="dropdown-arrow"></span>
-                                <select th:field="${collaborator.role.id}">
-                                    <option th:each="r : ${roles}" th:value="${r.id}" th:text="${r.name}"  >Designer</option>
-                                </select>
-                            </div>
-                            <div>
-                                <button type="submit" class="button">Update</button>
-                                <a th:href="@{/collaborators}" class="button button-secondary">Cancel</a>
-                                <a th:href="@{'/collaborator/delete/' + ${collaborator.id}}" class="button button-delete">Delete</a>
-                            </div>
+                    </div>
+                    <div class="actions edit-collaborator">
+                        <input type="text"  required="true" th:placeholder="${collaborator.name}" th:field="${collaborator.name}"/>
+                        <div class="custom-select">
+                            <span class="dropdown-arrow"></span>
+                            <select th:field="${collaborator.role.id}">
+                                <option th:each="r : ${roles}" th:value="${r.id}" th:text="${r.name}"  >Designer</option>
+                            </select>
+                        </div>
+                        <div>
+                            <button type="submit" class="button">Update</button>
+                            <a th:href="@{/collaborators}" class="button button-secondary">Cancel</a>
+                            <a th:href="@{'/collaborator/delete/' + ${collaborator.id}}" class="button button-delete">Delete</a>
                         </div>
                     </div>
                 </form>

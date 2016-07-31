@@ -34,18 +34,16 @@
                     <h2 th:if="${collaborators.size()} != 0">Collaborators with that role</h2>
                     <h2 th:if="${collaborators.size()} == 0">No collaborators with that role</h2>
                     <div class="actions edit-role">
-                        <div class="actions edit-role">
-                            <ul class="checkbox-list">
-                                <li th:each="c : ${collaborators}"><a th:href="@{'/collaborator/' + ${c.id}}"><span class="primary" th:text="${c.name}">Developer</span></a></li>
-                            </ul>
-                        </div>
+                        <ul class="checkbox-list">
+                            <li th:each="c : ${collaborators}"><a th:href="@{'/collaborator/' + ${c.id}}"><span class="primary" th:text="${c.name}">Developer</span></a></li>
+                        </ul>
                         <div class="actions edit-role">
                             <input type="text" th:field="${role.name}" th:placeholder="${role.name}"/>
-                            <div class="actions edit-role">
-                                <button type="submit" class="button">Update</button>
-                                <a th:href="@{/roles}" class="button button-secondary">Cancel</a>
-                                <a th:href="@{'/delete/' + ${role.id}}" class="button button-delete">Delete</a>
-                            </div>
+                        </div>
+                        <div>
+                            <button type="submit" class="button">Update</button>
+                            <a th:href="@{/roles}" class="button button-secondary">Cancel</a>
+                            <a th:href="@{'/delete/' + ${role.id}}" class="button button-delete">Delete</a>
                         </div>
                     </div>
                 </form>
