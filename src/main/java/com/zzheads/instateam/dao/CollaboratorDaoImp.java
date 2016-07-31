@@ -14,15 +14,11 @@ import java.util.stream.Collectors;
 @Repository
 public class CollaboratorDaoImp implements CollaboratorDao {
     @Autowired
-    SessionFactory mSessionFactory;
+    CrudDao mCrudDao;
 
     @Override
     public Collaborator findById(Long id) {
-        Session session = mSessionFactory.openSession();
-        session.beginTransaction();
-        Collaborator collaborator = session.get(Collaborator.class, id);
-        session.close();
-        return collaborator;
+        return (Collaborator) mCrudDao.findById(Collaborator.class, id);
     }
 
     @Override
@@ -33,30 +29,18 @@ public class CollaboratorDaoImp implements CollaboratorDao {
     @SuppressWarnings("unchecked")
     @Override
     public List<Collaborator> findAll() {
-        Session session = mSessionFactory.openSession();
-        session.beginTransaction();
-        List<Collaborator> collaborators = session.createCriteria(Collaborator.class).list();
-        session.close();
-        return collaborators;
+        return mCrudDao.findAll(Collaborator.class);
     }
 
     @Override
     public Long save (Collaborator collaborator) {
-        Session session = mSessionFactory.openSession();
-        session.beginTransaction();
-        session.saveOrUpdate(collaborator);
-        session.getTransaction().commit();
-        session.close();
+        mCrudDao.save(collaborator);
         return collaborator.getId();
     }
 
     @Override
     public void delete (Collaborator collaborator) {
-        Session session = mSessionFactory.openSession();
-        session.beginTransaction();
-        session.delete(collaborator);
-        session.getTransaction().commit();
-        session.close();
+        mCrudDao.delete(collaborator);
     }
 
     @Override

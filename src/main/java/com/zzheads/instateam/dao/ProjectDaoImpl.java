@@ -19,15 +19,11 @@ import java.util.Objects;
 @Repository
 public class ProjectDaoImpl implements ProjectDao {
     @Autowired
-    SessionFactory mSessionFactory;
+    CrudDao mCrudDao;
 
     @Override
     public Project findById(Long id) {
-        Session session = mSessionFactory.openSession();
-        session.beginTransaction();
-        Project project = session.get(Project.class, id);
-        session.close();
-        return project;
+        return (Project) mCrudDao.findById(Project.class, id);
     }
 
     @Override
@@ -38,30 +34,18 @@ public class ProjectDaoImpl implements ProjectDao {
     @SuppressWarnings("unchecked")
     @Override
     public List<Project> findAll() {
-        Session session = mSessionFactory.openSession();
-        session.beginTransaction();
-        List<Project> projects = session.createCriteria(Project.class).list();
-        session.close();
-        return projects;
+        return mCrudDao.findAll(Project.class);
     }
 
     @Override
     public Long save(Project project) {
-        Session session = mSessionFactory.openSession();
-        session.beginTransaction();
-        session.saveOrUpdate(project);
-        session.getTransaction().commit();
-        session.close();
+        mCrudDao.save(project);
         return project.getId();
     }
 
     @Override
     public void delete(Project project) {
-        Session session = mSessionFactory.openSession();
-        session.beginTransaction();
-        session.delete(project);
-        session.getTransaction().commit();
-        session.close();
+        mCrudDao.delete(project);
     }
 
     @Override

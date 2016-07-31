@@ -12,15 +12,11 @@ import java.util.List;
 @Repository
 public class RoleDaoImpl implements RoleDao {
     @Autowired
-    SessionFactory mSessionFactory;
+    CrudDao mCrudDao;
 
     @Override
     public Role findById(Long id) {
-        Session session = mSessionFactory.openSession();
-        session.beginTransaction();
-        Role role = session.get(Role.class, id);
-        session.close();
-        return role;
+        return (Role) mCrudDao.findById(Role.class, id);
     }
 
     @Override
@@ -30,30 +26,18 @@ public class RoleDaoImpl implements RoleDao {
 
     @SuppressWarnings("unchecked")
     public List<Role> findAll() {
-        Session session = mSessionFactory.openSession();
-        session.beginTransaction();
-        List<Role> roles = session.createCriteria(Role.class).list();
-        session.close();
-        return roles;
+        return mCrudDao.findAll(Role.class);
     }
 
     @Override
     public Long save(Role role) {
-        Session session = mSessionFactory.openSession();
-        session.beginTransaction();
-        session.saveOrUpdate(role);
-        session.getTransaction().commit();
-        session.close();
+        mCrudDao.save(role);
         return role.getId();
     }
 
     @Override
     public void delete(Role role) {
-        Session session = mSessionFactory.openSession();
-        session.beginTransaction();
-        session.delete(role);
-        session.getTransaction().commit();
-        session.close();
+        mCrudDao.delete(role);
     }
 
     @Override
