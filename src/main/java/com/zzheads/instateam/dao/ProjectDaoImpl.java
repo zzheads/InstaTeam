@@ -17,13 +17,11 @@ import java.util.Objects;
 // com.zzheads.instateam.dao created by zzheads on 30.07.2016.
 //
 @Repository
-public class ProjectDaoImpl implements ProjectDao {
-    @Autowired
-    CrudDao mCrudDao;
+public class ProjectDaoImpl extends CrudDaoImpl implements ProjectDao {
 
     @Override
     public Project findById(Long id) {
-        return (Project) mCrudDao.findById(Project.class, id);
+        return (Project) super.findById(Project.class, id);
     }
 
     @Override
@@ -34,18 +32,20 @@ public class ProjectDaoImpl implements ProjectDao {
     @SuppressWarnings("unchecked")
     @Override
     public List<Project> findAll() {
-        return mCrudDao.findAll(Project.class);
+        return super.findAll(Project.class);
     }
 
     @Override
     public Long save(Project project) {
-        mCrudDao.save(project);
+        super.save(project);
         return project.getId();
     }
 
     @Override
     public void delete(Project project) {
-        mCrudDao.delete(project);
+        project.setCollaborators(null);
+        project.setRolesNeeded(null);
+        super.delete(project);
     }
 
     @Override
@@ -65,11 +65,17 @@ public class ProjectDaoImpl implements ProjectDao {
     public void deleteCollaborator(Collaborator collaborator) {
         List<Project> projects = findAll();
         for (Project p : projects) {
-            for (Collaborator c : p.getCollaborators()) {
-                if (Objects.equals(c.getId(), collaborator.getId())) {
-                    p.getCollaborators().remove(c);
-                    p.getCollaborators().add(ProjectController.EMPTY_COLLABORATOR);
+            if (p.getCollaborators().contains(collaborator)) {
+                List<Collaborator> newCollaborators = new ArrayList<>();
+                for (Collaborator c : p.getCollaborators()) {
+                    if (c.getId() != collaborator.getId()) {
+                        newCollaborators.add(c);
+                    } else {
+                        newCollaborators.add(ProjectController.EMPTY_COLLABORATOR);
+                    }
                 }
+                p.setCollaborators(newCollaborators);
+                save(p);
             }
         }
     }

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="layout :: head"></div>
+
+<body>
+
+    <div th:replace="layout :: flash"></div>
+    <div th:replace="layout :: header"></div>
+    <div th:replace="layout :: nav"></div>
+
+        <section>
+            <div class="container wrapper">
+                <div class="project-list">
+                    <div class="project" th:each="project : ${projects}">
+                        <h2><a th:href="@{'/project_detail/' + ${project.id}}" th:text="${project.name}">Website Project</a></h2>
+                        <p th:text="${project.description}">Design and build a custom website</p>
+                        <span th:text="${project.status.name}" th:class="${project.status.tag}">Active</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </body>
+</html>

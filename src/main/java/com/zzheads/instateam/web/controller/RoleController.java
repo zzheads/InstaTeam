@@ -3,11 +3,15 @@ package com.zzheads.instateam.web.controller;//
 import com.zzheads.instateam.model.Collaborator;
 import com.zzheads.instateam.model.Role;
 import com.zzheads.instateam.service.*;
+import com.zzheads.instateam.web.FlashMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -33,9 +37,17 @@ public class RoleController {
 
     // Add a role
     @RequestMapping(value = "/roles", method = RequestMethod.POST)
-    public String addRole(@ModelAttribute Role newRole) {
-        // TODO: Check validation entered data
-        if ((newRole.getName().length()>3)&&(newRole.getName().length()<99)) mRoleService.save(newRole);
+    public String addRole(@Valid Role newRole, BindingResult result, RedirectAttributes redirectAttributes) {
+        if(result.hasErrors()) {
+            // Include validation errors upon redirect
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.category",result);
+            redirectAttributes.addFlashAttribute("collaborator", newRole);
+            // Redirect back to the form
+            return "redirect:/roles";
+        }
+
+        mRoleService.save(newRole);
+        redirectAttributes.addFlashAttribute("flash",new FlashMessage("Role successfully added.", FlashMessage.Status.SUCCESS));
         return "redirect:/roles";
     }
 
@@ -52,11 +64,13 @@ public class RoleController {
 
     // Delete a role
     @RequestMapping(value = "/delete/{roleId}", method = RequestMethod.GET)
-    public String deleteRole(@PathVariable Long roleId) {
+    public String deleteRole(@PathVariable Long roleId, RedirectAttributes redirectAttributes) {
         Role role = mRoleService.findById(roleId);
 
         mProjectService.deleteRole(role);
-
+        mCollaboratorService.deleteRole(role);
+        mRoleService.delete(role);
+        redirectAttributes.addFlashAttribute("flash",new FlashMessage("Role successfully deleted.", FlashMessage.Status.SUCCESS));
         return "redirect:/roles";
     }
 

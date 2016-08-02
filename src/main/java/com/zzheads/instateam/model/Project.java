@@ -19,6 +19,7 @@ import com.zzheads.instateam.web.controller.ProjectController;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -41,9 +42,16 @@ public class Project {
     @Column(columnDefinition="TEXT")
     private String description;
 
+    @Column
     private Status status;
 
-    private Date start;
+    @Column
+    private String startDateString;
+
+    @Column
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date startDate;
 
     @ManyToMany
     @LazyCollection(LazyCollectionOption.FALSE)
@@ -53,7 +61,20 @@ public class Project {
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Collaborator> collaborators;
 
-    public Project() {}
+    public Project() {
+        rolesNeeded = new ArrayList<>();
+        collaborators = new ArrayList<>();
+    }
+
+    public void addCollaborator (Collaborator collaborator) {
+        collaborators.add(collaborator);
+    }
+
+    public boolean deleteCollaborator (Collaborator collaborator) {
+        if (!collaborators.contains(collaborator)) return false;
+        collaborators.remove(collaborator);
+        return true;
+    }
 
     public Long getId() {
         return id;
@@ -103,12 +124,12 @@ public class Project {
         this.name = name;
     }
 
-    public Date getStart() {
-        return start;
+    public Date getStartDate() {
+        return startDate;
     }
 
-    public void setStart(Date start) {
-        this.start = start;
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
     }
 
     public void deleteRole (Role role) {
@@ -116,10 +137,6 @@ public class Project {
             if (c.getRole().equals(role)) collaborators.remove(c);
         }
         rolesNeeded.remove(role);
-    }
-
-    public void deleteCollaborator (Collaborator collaborator) {
-        collaborators.remove(collaborator);
     }
 
     public void fixCollaboratorsAndRoles () {
@@ -140,14 +157,15 @@ public class Project {
         }
         collaborators = newCollaborators;
 
-        int sizeCol = collaborators.size();
-        int sizeRol = rolesNeeded.size();
-        if (sizeCol<sizeRol) { // less Collaborators than RolesNeeded - fill empty
-            for (int i=sizeCol;i<sizeRol;i++) {
-                collaborators.add(ProjectController.EMPTY_COLLABORATOR);
+        if (rolesNeeded!=null) {
+            int sizeCol = collaborators.size();
+            int sizeRol = rolesNeeded.size();
+            if (sizeCol < sizeRol) { // less Collaborators than RolesNeeded - fill empty
+                for (int i = sizeCol; i < sizeRol; i++) {
+                    collaborators.add(ProjectController.EMPTY_COLLABORATOR);
+                }
             }
         }
-
     }
 
     @Override

@@ -4,14 +4,18 @@ import com.zzheads.instateam.model.Collaborator;
 import com.zzheads.instateam.model.Project;
 import com.zzheads.instateam.model.Role;
 import com.zzheads.instateam.service.*;
+import com.zzheads.instateam.web.FlashMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -38,9 +42,17 @@ public class CollaboratorController {
 
     // Add a collaborator
     @RequestMapping(value = "/collaborators", method = RequestMethod.POST)
-    public String addCollaborator(@ModelAttribute Collaborator newCollaborator) {
-        // TODO: Check validation entered data
-        if ((newCollaborator.getName().length()>3)&&(newCollaborator.getName().length()<99)) mCollaboratorService.save(newCollaborator);
+    public String addCollaborator(@Valid Collaborator newCollaborator, BindingResult result, RedirectAttributes redirectAttributes) {
+        if(result.hasErrors()) {
+            // Include validation errors upon redirect
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.category",result);
+            redirectAttributes.addFlashAttribute("collaborator", newCollaborator);
+            // Redirect back to the form
+            return "redirect:/collaborators";
+        }
+
+        mCollaboratorService.save(newCollaborator);
+        redirectAttributes.addFlashAttribute("flash",new FlashMessage("Collaborator successfully added.", FlashMessage.Status.SUCCESS));
         return "redirect:/collaborators";
     }
 
@@ -59,24 +71,36 @@ public class CollaboratorController {
 
     // Update a collaborator
     @RequestMapping(value = "/collaborator/{collaboratorId}", method = RequestMethod.POST)
-    public String editCollaborator(@ModelAttribute Collaborator collaborator, @PathVariable Long collaboratorId) {
+    public String editCollaborator(@Valid Collaborator collaborator, @PathVariable Long collaboratorId, BindingResult result, RedirectAttributes redirectAttributes) {
+        if(result.hasErrors()) {
+            // Include validation errors upon redirect
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.category",result);
+            redirectAttributes.addFlashAttribute("collaborator", collaborator);
+            // Redirect back to the form
+            return String.format("redirect:/collaborator/%s", collaboratorId);
+        }
+
         // if we changed role of collaborator - we need change that collaborator on empty one
         collaborator.getRole().setName(mRoleService.findById(collaborator.getRole().getId()).getName());
         for (Project p : mProjectService.findAllWithCollaborator(collaborator)) {
-            p.getCollaborators().remove(collaborator);
-            p.getCollaborators().add(ProjectController.EMPTY_COLLABORATOR);
+            if (!p.getRolesNeeded().contains(collaborator.getRole())) {
+                p.getCollaborators().remove(collaborator);
+                p.getCollaborators().add(ProjectController.EMPTY_COLLABORATOR);
+            }
         }
         mCollaboratorService.save(collaborator);
+        redirectAttributes.addFlashAttribute("flash",new FlashMessage("Collaborator successfully updated.", FlashMessage.Status.SUCCESS));
         return "redirect:/collaborators";
     }
 
     // Delete a role
     @RequestMapping(value = "collaborator/delete/{collaboratorId}", method = RequestMethod.GET)
-    public String deleteRole(@PathVariable Long collaboratorId) {
+    public String deleteCollaborator(@PathVariable Long collaboratorId, RedirectAttributes redirectAttributes) {
         Collaborator collaborator = mCollaboratorService.findById(collaboratorId);
 
         mProjectService.deleteCollaborator (collaborator);
-
-        return "redirect:/roles";
+        mCollaboratorService.delete(collaborator);
+        redirectAttributes.addFlashAttribute("flash",new FlashMessage("Collaborator successfully deleted.", FlashMessage.Status.SUCCESS));
+        return "redirect:/collaborators";
     }
 }

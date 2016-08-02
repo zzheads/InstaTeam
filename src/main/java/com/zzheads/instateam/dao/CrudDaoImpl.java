@@ -16,7 +16,6 @@ public class CrudDaoImpl implements CrudDao {
     @Autowired
     SessionFactory mSessionFactory;
 
-    @Override
     public Object findById(Class mClass, Long id) {
         Session session = mSessionFactory.openSession();
         session.beginTransaction();
@@ -26,12 +25,10 @@ public class CrudDaoImpl implements CrudDao {
     }
 
     @SuppressWarnings("unchecked")
-    @Override
     public Object findByName(Class mClass, String name) {
         return findAll(mClass).stream().filter(r->r.toString().equals(name)).findFirst().get();
     }
 
-    @Override
     public List findAll(Class mClass) {
         Session session = mSessionFactory.openSession();
         session.beginTransaction();
@@ -40,8 +37,6 @@ public class CrudDaoImpl implements CrudDao {
         return o;
     }
 
-
-    @Override
     public void save(Object o) {
         Session session = mSessionFactory.openSession();
         session.beginTransaction();
@@ -50,7 +45,6 @@ public class CrudDaoImpl implements CrudDao {
         session.close();
     }
 
-    @Override
     public void delete(Object o) {
         Session session = mSessionFactory.openSession();
         session.beginTransaction();

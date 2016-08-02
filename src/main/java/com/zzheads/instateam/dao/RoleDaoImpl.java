@@ -10,34 +10,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class RoleDaoImpl implements RoleDao {
-    @Autowired
-    CrudDao mCrudDao;
+public class RoleDaoImpl extends CrudDaoImpl implements RoleDao {
 
     @Override
     public Role findById(Long id) {
-        return (Role) mCrudDao.findById(Role.class, id);
+        return (Role) super.findById(Role.class, id);
     }
 
     @Override
     public Role findByName(String name) {
-        return findAll().stream().filter(r->r.getName().equals(name)).findFirst().get();
+        for (Role r : findAll()) {
+            if (r.getName().equals(name)) return r;
+        }
+        return null;
     }
 
     @SuppressWarnings("unchecked")
     public List<Role> findAll() {
-        return mCrudDao.findAll(Role.class);
+        return super.findAll(Role.class);
     }
 
     @Override
     public Long save(Role role) {
-        mCrudDao.save(role);
+        super.save(role);
         return role.getId();
     }
 
     @Override
     public void delete(Role role) {
-        mCrudDao.delete(role);
+        super.delete(role);
     }
 
     @Override

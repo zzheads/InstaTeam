@@ -1,32 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:fragment="head(page_title)" lang="en">
-    <meta charset="UTF-8"/>
-    <meta description="viewport" content="width=device-width, initial-scale=1"/>
+<div th:replace="layout :: head"></div>
 
-    <link href='https://fonts.googleapis.com/css?family=Inconsolata:400,700' rel='stylesheet' type='text/css'/>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
-    <link rel="stylesheet" th:href="@{/css/normalize.css}" />
-    <link rel="stylesheet" th:href="@{/css/site.css}" />
-
-    <title th:text="'InstaTeam | ' + ${page_title}">InstaTeam</title>
-</head>
 <body>
-        <header>
-            <div class="container">
-                <div class="site-header">
-                    <a class="logo" th:href="@{/}">InstaTeam</a>
-                    <a class="new-project button icon-left" href="#"><i class="material-icons">add</i> New Project</a>
-                </div>
-            </div>
-        </header>
-        <nav>
-            <ul>
-                <li class="selected"><a th:href="@{/}">Projects</a></li>
-                <li><a th:href="@{/collaborators}">Collaborators</a></li>
-                <li><a th:href="@{/roles}">Roles</a></li>
-            </ul>
-        </nav>
+
+    <div th:replace="layout :: flash"></div>
+    <div th:replace="layout :: header"></div>
+    <div th:replace="layout :: nav"></div>
 
         <section>
             <div class="container wrapper">
@@ -37,6 +17,8 @@
                         <label for="description">Description:</label>
                         <textarea rows="5" id="description" type="text"  required="true" th:placeholder="*{description}" th:value="*{description}" th:field="*{description}"/>
 
+                        <label for="date-started">Date started:</label>
+                        <input type="date" th:value="*{startDate}" th:field="*{startDate}" id="date-started"/>
 
                         <div>
                             <label for="project_status">Project Status:</label>
@@ -64,10 +46,7 @@
 
                     </div>
                 </form>
-
-
-
-                </div>
+            </div>
         </section>
     </body>
 </html>
