@@ -50,7 +50,7 @@ public class ProjectController {
         }
 
         model.addAttribute("page_title", "index");
-        model.addAttribute("projects", mProjectService.findAll());
+        model.addAttribute("projects", mProjectService.findAllSortedByDate());
         model.addAttribute("statuses", Status.values());
         return "projects";
     }
@@ -71,7 +71,6 @@ public class ProjectController {
         List<Role> roles = mRoleService.findAll();
 
         project.setStartDate(new Date());
-        project.setStartDateString(new Date().toString());
 
         model.addAttribute("page_title", "create project");
         model.addAttribute("roles", roles);

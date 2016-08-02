@@ -8,6 +8,7 @@ import com.zzheads.instateam.web.controller.ProjectController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 
 // InstaTeam
@@ -76,6 +77,18 @@ public class ProjectServiceImpl implements ProjectService {
         }
         mCollaboratorDao.deleteRole(role);
         mRoleDao.delete(role);
+    }
+
+    @Override public List<Project> findAllSortedByDate() {
+        List<Project> projects = findAll();
+        projects.sort(new Comparator<Project>() {
+            @Override public int compare(Project o1, Project o2) {
+                if (o1.getStartDate() == null) return 1;
+                if (o2.getStartDate() == null) return -1;
+                return o1.getStartDate().compareTo(o2.getStartDate());
+            }
+        });
+        return projects;
     }
 
     @Override

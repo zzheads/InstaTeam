@@ -18,4 +18,5 @@ public interface ProjectService {
     List<Project> findAllWithCollaborator(Collaborator collaborator);
     void deleteCollaborator(Collaborator collaborator);
     void deleteRole(Role role);
+    List<Project> findAllSortedByDate();
 }
