@@ -4,6 +4,7 @@
         "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
     <session-factory>
+
         <!-- SQL dialect -->
         <property name="dialect">org.hibernate.dialect.H2Dialect</property>
 
@@ -18,5 +19,6 @@
 
         <!-- Update the database schema (structure) on startup -->
         <property name="hbm2ddl.auto">update</property>
+
     </session-factory>
 </hibernate-configuration>

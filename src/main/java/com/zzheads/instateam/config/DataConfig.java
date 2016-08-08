@@ -11,6 +11,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 
 import javax.sql.DataSource;
+import java.util.Properties;
 
 
 @Configuration
@@ -42,4 +43,5 @@ public class DataConfig {
 
         return ds;
     }
+
 }

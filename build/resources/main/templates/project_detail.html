@@ -1,38 +1,20 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:fragment="head(page_title)" lang="en">
-    <meta charset="UTF-8"/>
-    <meta description="viewport" content="width=device-width, initial-scale=1"/>
+<div th:replace="layout :: head"></div>
 
-    <link href='https://fonts.googleapis.com/css?family=Inconsolata:400,700' rel='stylesheet' type='text/css'/>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
-    <link rel="stylesheet" th:href="@{/css/normalize.css}" />
-    <link rel="stylesheet" th:href="@{/css/site.css}" />
-
-    <title th:text="'InstaTeam | ' + ${page_title}">InstaTeam</title>
-</head>
 <body>
-        <header>
-            <div class="container">
-                <div class="site-header">
-                    <a class="logo" th:href="@{/}">InstaTeam</a>
-                    <a class="new-project button icon-left" th:href="@{/project_new}"><i class="material-icons">add</i> New Project</a>
-                </div>
-            </div>
-        </header>
-        <nav>
-            <ul>
-                <li class="selected"><a th:href="@{/}">Projects</a></li>
-                <li><a th:href="@{/collaborators}">Collaborators</a></li>
-                <li><a th:href="@{/roles}">Roles</a></li>
-            </ul>
-        </nav>
+
+    <div th:replace="layout :: flash"></div>
+    <div th:replace="layout :: header"></div>
+    <div th:replace="layout :: nav"></div>
+
         <section>
             <div class="container wrapper">
                 <div class="project-list single">
                     <div class="project">
                         <h2 th:text="${project.name}">Website Project</h2>
                         <p th:text="${project.description}">Design and build a custom website</p>
+                        <span th:text="${project.startDate}">26/02/2016</span>
                         <span th:text="${project.status.name}" th:class="${project.status.tag}">Active</span>
                     </div>
                     <div th:if="${project.rolesNeeded} != null" class="roles-collaborators">
@@ -43,8 +25,10 @@
                         </div>
                     </div>
                     <div class="actions">
-                        <a class="button" th:href="@{'/edit_project/' + ${project.id}}">Edit Project</a>
+                        <a class="button" th:href="@{'/project_edit/' + ${project.id}}">Edit Project</a>
                         <a class="button" th:href="@{'/project_collaborators/' + ${project.id}}">Edit Collaborators</a>
+                        <a th:href="@{/}" class="button button-secondary">Cancel</a>
+                        <a th:href="@{'/project/delete/' + ${project.id}}" class="button button-delete">Delete</a>
                     </div>
                 </div>
             </div>

@@ -1,32 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:fragment="head(page_title)" lang="en">
-    <meta charset="UTF-8"/>
-    <meta description="viewport" content="width=device-width, initial-scale=1"/>
+<div th:replace="layout :: head"></div>
 
-    <link href='https://fonts.googleapis.com/css?family=Inconsolata:400,700' rel='stylesheet' type='text/css'/>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
-    <link rel="stylesheet" th:href="@{/css/normalize.css}" />
-    <link rel="stylesheet" th:href="@{/css/site.css}" />
+<body>
 
-    <title th:text="'InstaTeam | ' + ${page_title}">InstaTeam</title>
-</head>
-    <body>
-        <header>
-            <div class="container">
-                <div class="site-header">
-                    <a class="logo" th:href="@{/}">InstaTeam</a>
-                    <a class="new-project button icon-left" th:href="@{/project_new}"><i class="material-icons">add</i> New Project</a>
-                </div>
-            </div>
-        </header>
-        <nav>
-            <ul>
-                <li><a th:href="@{/}">Projects</a></li>
-                <li class="selected"><a th:href="@{/collaborators}">Collaborators</a></li>
-                <li><a th:href="@{/roles}">Roles</a></li>
-            </ul>
-        </nav>
+    <div th:replace="layout :: flash"></div>
+    <div th:replace="layout :: header"></div>
+    <div th:replace="layout :: nav"></div>
+
         <section>
             <div class="container wrapper">
                 <form th:action="@{|/collaborator/${collaborator.id}|}" method="post" th:object="${collaborator}">
@@ -37,19 +18,19 @@
                         <ul class="checkbox-list">
                             <li th:each="project : ${projects}"><a th:href="@{'/project_detail/' + ${project.id}}"><span class="primary" th:text="${project.name}"></span></a></li>
                         </ul>
-                        <div class="actions edit-collaborator">
-                            <input type="text"  required="true" th:placeholder="${collaborator.name}" th:field="${collaborator.name}"/>
-                            <div class="custom-select">
-                                <span class="dropdown-arrow"></span>
-                                <select th:field="${collaborator.role.id}">
-                                    <option th:each="r : ${roles}" th:value="${r.id}" th:text="${r.name}"  >Designer</option>
-                                </select>
-                            </div>
-                            <div>
-                                <button type="submit" class="button">Update</button>
-                                <a th:href="@{/collaborators}" class="button button-secondary">Cancel</a>
-                                <a th:href="@{'/collaborator/delete/' + ${collaborator.id}}" class="button button-delete">Delete</a>
-                            </div>
+                    </div>
+                    <div class="actions edit-collaborator">
+                        <input type="text"  required="true" th:placeholder="${collaborator.name}" th:field="${collaborator.name}"/>
+                        <div class="custom-select">
+                            <span class="dropdown-arrow"></span>
+                            <select th:field="${collaborator.role.id}">
+                                <option th:each="r : ${roles}" th:value="${r.id}" th:text="${r.name}"  >Designer</option>
+                            </select>
+                        </div>
+                        <div>
+                            <button type="submit" class="button">Update</button>
+                            <a th:href="@{/collaborators}" class="button button-secondary">Cancel</a>
+                            <a th:href="@{'/collaborator/delete/' + ${collaborator.id}}" class="button button-delete">Delete</a>
                         </div>
                     </div>
                 </form>

@@ -13,7 +13,7 @@
                 <div class="project-list">
                     <div class="project" th:each="project : ${projects}">
                         <h2><a th:href="@{'/project_detail/' + ${project.id}}" th:text="${project.name}">Website Project</a></h2>
-                        <span th:text="#{'Started: ' + ${project.startDate}}">26/02/2016</span>
+                        <span th:text="|Started: ${project.startDate}|">26/02/2016</span>
                         <p th:text="${project.description}">Design and build a custom website</p>
                         <span th:text="${project.status.name}" th:class="${project.status.tag}">Active</span>
                     </div>

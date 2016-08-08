@@ -22,7 +22,7 @@
         <div class="container">
             <div class="site-header">
                 <a class="logo" th:href="@{/}">InstaTeam</a>
-                <a class="new-project button icon-left" href="#"><i class="material-icons">add</i> New Project</a>
+                <a class="new-project button icon-left" th:href="@{/project_new}"><i class="material-icons">add</i> New Project</a>
             </div>
         </div>
     </header>
@@ -47,8 +47,8 @@
         <div th:classappend="${#strings.toLowerCase(flash.status)}" th:text="${flash.message}" class="flash"></div>
     </div>
 
-    <div th:if="${flash == null}" class="container">
-        <div text="Everything Ok" class="flash flash-success"></div>
+    <div th:if="${flash eq null}" class="container">
+        <div text="Everything Ok" class="flash success"></div>
     </div>
 
 </div>

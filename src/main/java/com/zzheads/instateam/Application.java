@@ -34,4 +34,4 @@ public class Application {
 //
 //    DONE: Extract the common code of each DAO implementation to an abstract class that the DAO implementations extend.
 //    DONE: Add the ability to delete projects, roles, and contractors and ensure data integrity for all relationships. For example, when a collaborator is deleted, make sure that all roles previously assigned to this collaborator become unassigned.
-//    TODO: Include a start date on projects, and sort chronologically by start date on the project index view.
+//    DONE: Include a start date on projects, and sort chronologically by start date on the project index view.
